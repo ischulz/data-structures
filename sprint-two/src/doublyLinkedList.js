@@ -3,8 +3,8 @@ var DoublyLinkedList = function() {
   list.head = null;
   list.tail = null;
   
-  list.addToHead = function(value) {
-    let node = DLLNode(value);
+  list.addToHead = function(value, key) {
+    let node = DLLNode(value, key);
     if (list.tail === null) {
       list.tail = node;
     } else {
@@ -13,8 +13,8 @@ var DoublyLinkedList = function() {
     }
     list.head = node;
   };
-  list.addToTail = function(value) {
-    let node = DLLNode(value);
+  list.addToTail = function(value, key) {
+    let node = DLLNode(value, key);
     if (list.head === null) {
       list.head = node;
     } else {
@@ -31,6 +31,10 @@ var DoublyLinkedList = function() {
       if (list.head !== null) {
         list.head.prev = null;
       }
+      if (node === list.tail) {
+        
+        list.tail = null;
+      }
       return node.value;
     }
   };
@@ -41,6 +45,10 @@ var DoublyLinkedList = function() {
       list.tail = node.prev;
       if (list.tail !== null) {
         list.tail.next = null;
+      }
+      console.log(list.head);
+      if (node === list.head) {
+        list.head = null;
       }
       return node.value;
     }
@@ -60,10 +68,11 @@ var DoublyLinkedList = function() {
   return list;
 };
 
-var DLLNode = function(value) {
+var DLLNode = function(value, key) {
   var node = {};
 
   node.value = value;
+  node.key = key;
   node.prev = null;
   node.next = null;
 

@@ -21,26 +21,11 @@ treeMethods.addChild = function(value) {
   this.childCount++;
 };
 
-// treeMethods.removeFromParent = function(value) {
-//   var subTree = {};
-//   var parent = null;
-//   if (this.value === value) {
-//     subTree = this;
-//     parent = this.parent; 
-//     this.parent = null;
-//   }
-//   if (parent !== null) {
-//     delete parent.children[this.key];
-//   }
-
-//   return subTree;
-// };
-
-treeMethods.removeFromParent = function(value, sT) {
-  let subTree = sT || {};
+treeMethods.removeFromParent = function(value) {
+  var subTree;
   var parent = null;
   if (this.value === value) {
-    _.extend(subTree, this);
+    subTree = this;
     parent = this.parent; 
     subTree.parent = null;
     if (parent !== null) {
@@ -48,11 +33,31 @@ treeMethods.removeFromParent = function(value, sT) {
     }
   } else {
     for (let child in this.children) {
-      this.children[child].removeFromParent(value, subTree);
+      subTree = this.children[child].removeFromParent(value);
+      if (subTree) {
+        return subTree;
+      }
     }
   }
   return subTree;
 };
+// treeMethods.removeFromParent = function(value, sT) {
+//   let subTree = sT || {};
+//   var parent = null;
+//   if (this.value === value) {
+//     _.extend(subTree, this);
+//     parent = this.parent; 
+//     subTree.parent = null;
+//     if (parent !== null) {
+//       delete parent.children[this.key];
+//     }
+//   } else {
+//     for (let child in this.children) {
+//       this.children[child].removeFromParent(value, subTree);
+//     }
+//   }
+//   return subTree;
+// };
 
 treeMethods.contains = function(target) {
   if (this.value === target) {
