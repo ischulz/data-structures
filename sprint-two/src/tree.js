@@ -36,11 +36,11 @@ treeMethods.addChild = function(value) {
 //   return subTree;
 // };
 
-treeMethods.removeFromParent = function(value) {
-  var subTree = {};
+treeMethods.removeFromParent = function(value, sT) {
+  let subTree = sT || {};
   var parent = null;
   if (this.value === value) {
-    subTree = Object.assign({}, this);
+    _.extend(subTree, this);
     parent = this.parent; 
     subTree.parent = null;
     if (parent !== null) {
@@ -48,11 +48,9 @@ treeMethods.removeFromParent = function(value) {
     }
   } else {
     for (let child in this.children) {
-      this.children[child].removeFromParent(value);
+      this.children[child].removeFromParent(value, subTree);
     }
   }
-
-
   return subTree;
 };
 

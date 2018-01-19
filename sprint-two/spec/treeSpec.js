@@ -42,8 +42,10 @@ describe('tree', function() {
   });
   
   it('should correctly remove tree from parent and return', function() {
+    tree.addChild(1);
     tree.addChild(5);
-    console.log(tree.children);
+    tree.addChild(3);
+    console.log(tree);
     console.log(tree.removeFromParent(5));
     //console.log(tree.children);
     //expect(tree.contains(5)).to.equal(true);
