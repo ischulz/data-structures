@@ -1,14 +1,11 @@
-var BinarySearchTree = function(value, currentDepth) {
+var BinarySearchTree = function(value) {
   let BST = Object.create(BinarySearchTree.prototype);
-  //BST.left = null;
-  //BST.right = null;
-  //BST.value = value;
   BST.maxDepth = 0;
   BST.minDepth = 0;
-  BST.numMinNodes = 1;
   BST.left = null;
   BST.right = null;
-  BST.startNode = BSTNode(value, 0, BST);  
+  BST.startNode = BSTNode(value, 0, BST);
+  BST.floorCount = {};
   return BST;
 };
 var BSTNode = function(value, currentDepth, BST) {
@@ -21,26 +18,20 @@ var BSTNode = function(value, currentDepth, BST) {
   return bstNode;
 };
 
-
-BinarySearchTree.prototype.insert = function (value) {
-  this.startNode.insert(value, 0);
+BinarySearchTree.prototype.insert = function (value, noBalance) {
+  this.startNode.insert(value, 0, noBalance);
 };
-BSTNode.prototype.insert = function(value, currentDepth) {
-  
-  console.log(this);
+BSTNode.prototype.insert = function(value, currentDepth, noBalance) {
   if (value > this.value) {
     if (this.right) {
-      this.right.insert(value, currentDepth + 1);
-      if (currentDepth === this.BST.minDepth) {
-        this.BST.numMinNodes--;
-      }
+      this.right.insert(value, currentDepth + 1, noBalance);
     } else {
       this.right = BSTNode(value, currentDepth + 1, this.BST);
-      if (currentDepth + 1 === this.BST.minDepth) {
-        this.BST.numMinNodes++;
-      }
-      if (currentDepth + 1 > this.BST.minDepth && this.BST.numMinNodes === 1) {
-        this.BST.minDepth = currentDepth + 1;
+      this.BST.floorCount[currentDepth + 1] = this.BST.floorCount[currentDepth + 1] + 1 || 1;
+      if (currentDepth === this.BST.minDepth) {
+        if (this.BST.floorCount[currentDepth + 1] === Math.pow(2, currentDepth + 1)) {
+          this.BST.minDepth++;
+        }
       }
       if (currentDepth + 1 === 1) {
         this.BST.right = this.right;
@@ -51,15 +42,39 @@ BSTNode.prototype.insert = function(value, currentDepth) {
     }
   } else if (value < this.value) {
     if (this.left) {
-      this.left.insert(value, currentDepth + 1);
+      this.left.insert(value, currentDepth + 1, noBalance);
     } else {
       this.left = BSTNode(value, currentDepth + 1, this.BST);
+      this.BST.floorCount[currentDepth + 1] = this.BST.floorCount[currentDepth + 1] + 1 || 1;
+      if (currentDepth === this.BST.minDepth) {
+        if (this.BST.floorCount[currentDepth + 1] === Math.pow(2, currentDepth + 1)) {
+          this.BST.minDepth++;
+        }
+      }
       if (currentDepth + 1 === 1) {
         this.BST.left = this.left;
       }
     }
     if (currentDepth + 1 > this.BST.maxDepth) {
       this.BST.maxDepth = currentDepth + 1;
+    }
+  }
+  
+  if (!noBalance && ((this.BST.maxDepth / 2) > (this.BST.minDepth))) {
+    if (this.BST.minDepth !== 0 || (this.BST.minDepth === 0 && this.BST.maxDepth - this.BST.minDepth > 2)) {
+      console.log('maxdepth: ' + this.BST.maxDepth + 'mindepth: ' + this.BST.minDepth);
+      this.BST.left = null;
+      this.BST.right = null;
+      this.BST.maxDepth = 0;
+      this.BST.minDepth = 0;
+      this.BST.floorCount = {};
+      //console.log(this.BST.startNode);
+      let arr = rebalance(this.BST.startNode);
+      console.log('arr: ' + arr);
+      //debugger;
+      this.BST.startNode = BSTNode(arr[Math.floor((arr.length - 1) / 2)], 0, this.BST);
+      buildBalancedTree(arr, this.BST);
+      console.log(this.BST.startNode);
     }
   }
 };
@@ -123,20 +138,20 @@ let rebalance = function(bst) {
 
 };
 
-let buildBalancedTree = function(arr) {
-  //debugger;
-  //console.log(arr);
-  let balancedBST = null;
+let buildBalancedTree = function(arr, BST) {
   if (arr.length) {
-    let BSTroot = Math.floor(arr.length / 2); 
-    //console.log('BSTroot: ' + BSTroot);
-    balancedBST = BinarySearchTree(arr[BSTroot]);
+    let BSTroot = Math.floor((arr.length - 1) / 2);
+    //console.log(BSTroot);
+    BST.insert(arr[BSTroot], true);
     if (BSTroot !== 0) {
-      balancedBST.left = buildBalancedTree(arr.slice(0, BSTroot));
-      balancedBST.right = buildBalancedTree(arr.slice(BSTroot + 1));
+      buildBalancedTree(arr.slice(0, BSTroot), BST);
+      buildBalancedTree(arr.slice(BSTroot + 1), BST);
+    } else if (arr.length === 2) {
+      BST.insert(arr[BSTroot + 1], true);
+      //buildBalancedTree(arr.slice(BSTroot + 1), BST);
     }
+    //console.log(arr + ' -> ' + arr.slice(0, BSTroot) + ' + ' + arr[BSTroot] + ' + ' + arr.slice(BSTroot + 1));
   }
-  return balancedBST;
 };
 
 

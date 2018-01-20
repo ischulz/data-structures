@@ -5,7 +5,7 @@ describe('binarySearchTree', function() {
     binarySearchTree = BinarySearchTree(5);
   });
 
-  it('should have methods named "insert", "contains", and "depthFirstLog', function() {
+  /*it('should have methods named "insert", "contains", and "depthFirstLog', function() {
     expect(binarySearchTree.insert).to.be.a('function');
     expect(binarySearchTree.contains).to.be.a('function');
     expect(binarySearchTree.depthFirstLog).to.be.a('function');
@@ -16,15 +16,12 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(3);
     binarySearchTree.insert(7);
     binarySearchTree.insert(6);
-    console.log(binarySearchTree.maxDepth);
     binarySearchTree.insert(4);
-    console.log(binarySearchTree.maxDepth);
-    //console.log(rebalance(binarySearchTree));
     expect(binarySearchTree.left.right.value).to.equal(3);
     expect(binarySearchTree.right.left.value).to.equal(6);
   });
 
-  /*it('should have a working "contains" method', function() {
+  it('should have a working "contains" method', function() {
     binarySearchTree.insert(2);
     binarySearchTree.insert(3);
     binarySearchTree.insert(7);
@@ -40,5 +37,25 @@ describe('binarySearchTree', function() {
     binarySearchTree.insert(7);
     binarySearchTree.depthFirstLog(func);
     expect(array).to.eql([5, 2, 3, 7]);
-  });*/
+  });
+  */
+  it('should execute a casdfasdf', function() {
+    binarySearchTree.insert(2);
+    binarySearchTree.insert(3);
+    // binarySearchTree.insert(4);
+    binarySearchTree.insert(7);
+    binarySearchTree.insert(9);
+    binarySearchTree.insert(10);
+    //console.log(binarySearchTree.startNode);
+    binarySearchTree.insert(1);
+    binarySearchTree.insert(6);
+    binarySearchTree.insert(15);
+    binarySearchTree.insert(16);
+    binarySearchTree.insert(17);
+    
+    // expect(binarySearchTree.left.right.right.value).to.equal(5);
+    // //binarySearchTree.depthFirstLog(func);
+    console.log(binarySearchTree.minDepth);
+    console.log(binarySearchTree.maxDepth);
+  });
 });
