@@ -58,8 +58,31 @@ BinarySearchTree.prototype.breadthFirstLog = function (cb) {
       order.push(currentNode.right);
     }
   }
+};
 
+let rebalance = function(bst) {
+  let arr = [bst.value];
+  if (bst.left) {
+    if (bst.right) {
+      return rebalance(bst.left).concat(arr).concat(rebalance(bst.right));
+    }
+    return rebalance(bst.left).concat(arr);
+  } else if (bst.right) {
+    return arr.concat(rebalance(bst.right));
+  }
+  return arr;
 
+};
+
+let buildBalancedTree = function(arr) {
+  let balancedBST = null;
+  if (arr.length) {
+    let BSTroot = Math.floor(arr.length / 2); 
+    balancedBST = BinarySearchTree(arr[BSTroot]);
+    balancedBST.left = buildBalancedTree(arr.substr(0, BSTroot));
+    balancedBST.right = buildBalancedTree(arr.substr(BSTroot));
+  }
+  return balancedBST;
 };
 
 

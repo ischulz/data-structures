@@ -72,6 +72,50 @@ treeMethods.contains = function(target) {
   return contains;
 };
 
+treeMethods.traverse = function(cb) {
+  let queue = Queue();
+  queue.enqueue(this);
+  while (queue.size()) {
+    let tree = queue.dequeue();
+    if (tree.value !== undefined) {
+      tree.value = cb(tree.value);
+    }  
+    for (let child in tree.children) {
+      queue.enqueue(tree.children[child]);
+    }
+  }
+};
+
+var Queue = function() {
+  var someInstance = {};
+
+  // Use an object with numeric keys to store values
+  var storage = {};
+  var first = 0;
+  var last = 0;
+
+  someInstance.enqueue = function(value) {
+    storage[last] = value;
+    last ++;
+  };
+
+  someInstance.dequeue = function() {
+    if ((last - first) > 0) {
+      let deleted = storage[first];
+      //delete storage[first];
+      first ++;
+      return deleted;
+    }
+  };
+
+  someInstance.size = function() {
+    return last - first;
+  };
+
+  return someInstance;
+};
+
+
 
 
 /*

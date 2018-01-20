@@ -46,7 +46,6 @@ var DoublyLinkedList = function() {
       if (list.tail !== null) {
         list.tail.next = null;
       }
-      console.log(list.head);
       if (node === list.head) {
         list.head = null;
       }

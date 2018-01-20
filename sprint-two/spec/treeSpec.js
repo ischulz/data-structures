@@ -60,4 +60,19 @@ describe('tree', function() {
     tree.removeFromParent(5);
     expect(tree.contains(5)).to.equal(false);
   });
+
+  it('should correctly change all tree node values with given call back function', function() {
+    let multByTwo = function (a) {
+      return a * 2;
+    };
+    tree.addChild(1);
+    tree.addChild(5);
+    tree.children[1].addChild(51);
+    tree.children[1].addChild(52);
+    tree.addChild(3);
+    tree.traverse(multByTwo);
+    expect(tree.contains(10)).to.equal(true);
+    //expect(tree.contains(5)).to.equal(false);
+    //expect(tree.contains(102)).to.equal(true);
+  });
 });
